@@ -318,6 +318,11 @@ is-core-module@^2.9.0:
   dependencies:
     has "^1.0.3"
 
+konva@^8.3.11:
+  version "8.3.11"
+  resolved "https://registry.yarnpkg.com/konva/-/konva-8.3.11.tgz#ffd8012a8240498d63652218c8db13e7fb51a3e7"
+  integrity sha512-5PsE3oQYnzwwUUCv8gV2zpLjenotqLy0AmXauyy9GPi+UHIynmLkrsAIZfEkjPNEgAwmh5r6I0JQa1fTt8ZrGw==
+
 lru-cache@^6.0.0:
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-6.0.0.tgz#6d6fe6570ebd96aaf90fcad1dafa3b2566db3a94"
@@ -415,6 +420,11 @@ vite@^3.0.7:
     rollup ">=2.75.6 <2.77.0 || ~2.77.0"
   optionalDependencies:
     fsevents "~2.3.2"
+
+vue-konva@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/vue-konva/-/vue-konva-3.0.1.tgz#1b0537e28aa492e28565e70ab9a10470ca21685a"
+  integrity sha512-2RQrGs1oSJR9G+mPvTXZsuLk1Jiy8vImYssfYZrUXVcpYP2s3Ihq0AUbg4lUj/gFpEcd2iK389ByPysUOD07Tw==
 
 vue-tsc@^0.39.5:
   version "0.39.5"

@@ -1,16 +1,31 @@
 <script setup lang="ts">
-import { computed, reactive, ref } from "vue";
+import { computed, reactive, ref, toRefs, watch } from "vue";
 import konva from "konva";
+import qrcode from "qrcode";
 
 const props = defineProps<{
   iconImage: HTMLImageElement | null;
   name: string;
   major: string;
+  profUrl: string;
 }>();
 
-const backgroundImageRatio = window.innerWidth / 2041;
+const baseImageSizes = {
+  width: 2041,
+  height: 1379,
+  qrStart: {
+    x: 1723,
+    y: 1060,
+  },
+  qrEnd: {
+    x: 1969,
+    y: 1307,
+  },
+};
+const { profUrl } = toRefs(props);
+const baseImageRatio = window.innerWidth / baseImageSizes.width;
 const canvasWidth = window.innerWidth;
-const canvasHeight = 1379 * backgroundImageRatio;
+const canvasHeight = baseImageSizes.height * baseImageRatio;
 const configKonva = {
   width: canvasWidth,
   height: canvasHeight,
@@ -19,6 +34,8 @@ const state = reactive({
   backgroundImage: new Image(),
   isLoaded: false,
   imageUrl: "",
+  qrcodeBase64: "",
+  qrcodeImage: new Image(),
 });
 const stageRef = ref<InstanceType<typeof konva.Stage>>();
 
@@ -78,13 +95,37 @@ const iconConfig = computed<konva.ImageConfig | null>(() => {
   };
 });
 
+const qrcodeConfig = computed<konva.ImageConfig>(() => {
+  return {
+    image: state.qrcodeImage,
+    width: (baseImageSizes.qrEnd.x - baseImageSizes.qrStart.x) * baseImageRatio,
+    height:
+      (baseImageSizes.qrEnd.y - baseImageSizes.qrStart.y) * baseImageRatio,
+    x: baseImageSizes.qrStart.x * baseImageRatio,
+    y: baseImageSizes.qrStart.y * baseImageRatio,
+  };
+});
+
+watch(profUrl, async (newValue) => {
+  const qrUrl = await qrcode.toDataURL(newValue);
+
+  return new Promise<void>(async (resolve, reject) => {
+    const src = qrUrl;
+    state.qrcodeImage.onload = () => {
+      state.isLoaded = true;
+      resolve();
+    };
+    state.qrcodeImage.onerror = (e) => reject(e);
+    state.qrcodeImage.src = src;
+  });
+});
 const exportImage = async () => {
   if (stageRef.value === undefined) {
     return null;
   }
   const imageUrl = stageRef.value
     .getStage()
-    .toDataURL({ pixelRatio: 1 / backgroundImageRatio });
+    .toDataURL({ pixelRatio: 1 / baseImageRatio });
 
   const link = document.createElement("a");
   link.download = "icon.png";
@@ -112,6 +153,9 @@ const exportImage = async () => {
       </v-layer>
       <v-layer>
         <v-image v-if="iconConfig !== null" :config="iconConfig"></v-image>
+      </v-layer>
+      <v-layer>
+        <v-image v-if="profUrl !== ''" :config="qrcodeConfig"></v-image>
       </v-layer>
     </v-stage>
   </div>

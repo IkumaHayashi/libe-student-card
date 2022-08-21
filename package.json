@@ -4,10 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "run-p dev:*",
-    "dev:front": "vite",
+    "dev": "vite",
+    "dev-all": "run-p dev:*",
     "dev:functions-build": "yarn --cwd functions build:watch",
-    "dev:functions-serve": "yarn --cwd functions serve",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "deploy": "yarn build && firebase deploy --only hosting"

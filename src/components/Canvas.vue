@@ -78,11 +78,20 @@ const iconConfig = computed<konva.ImageConfig | null>(() => {
   };
 });
 
-const exportImage = () => {
+const exportImage = async () => {
   if (stageRef.value === undefined) {
     return null;
   }
-  state.imageUrl = stageRef.value.getStage().toDataURL();
+  const imageUrl = stageRef.value
+    .getStage()
+    .toDataURL({ pixelRatio: 1 / backgroundImageRatio });
+
+  const link = document.createElement("a");
+  link.download = "icon.png";
+  link.href = imageUrl;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 };
 </script>
 
@@ -106,5 +115,5 @@ const exportImage = () => {
       </v-layer>
     </v-stage>
   </div>
-  <button @click="exportImage">画像出力</button>
+  <button @click="exportImage">ダウンロード</button>
 </template>

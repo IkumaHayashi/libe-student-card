@@ -28,7 +28,7 @@ const baseImageSizes = {
   iconWidth: 280 * 2,
   nameStart: {
     x: 1080,
-    y: 550,
+    y: 500,
   },
   nameEnd: {
     x: 1950,
@@ -62,6 +62,7 @@ const state = reactive({
   qrcodeBase64: "",
   qrcodeImage: new Image(),
   font: defaultFont,
+  color: "#36455E",
 });
 const stageRef = ref<InstanceType<typeof konva.Stage>>();
 
@@ -98,6 +99,7 @@ const nameTextConfig = computed<konva.TextConfig>(() => {
     y: baseImageSizes.nameStart.y * baseImageRatio,
     draggable: true,
     fontFamily: state.font,
+    fill: state.color,
   };
 });
 const majorTextConfig = computed<konva.TextConfig>(() => {
@@ -110,6 +112,7 @@ const majorTextConfig = computed<konva.TextConfig>(() => {
     y: baseImageSizes.majorStart.y * baseImageRatio,
     draggable: true,
     fontFamily: state.font,
+    fill: state.color,
   };
 });
 
@@ -176,6 +179,8 @@ const exportImage = async () => {
   <select v-model="state.font">
     <option v-for="font in fonts" :value="font" :key="font">{{ font }}</option>
   </select>
+  <label for="head">文字色を選択</label>
+  <input type="color" id="head" name="head" v-model="state.color" />
   <v-stage :config="configKonva" id="stage" ref="stageRef">
     <v-layer>
       <v-image

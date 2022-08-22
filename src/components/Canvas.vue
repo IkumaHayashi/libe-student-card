@@ -21,7 +21,32 @@ const baseImageSizes = {
     x: 1969,
     y: 1307,
   },
+  iconCenter: {
+    x: 450,
+    y: 780,
+  },
+  iconWidth: 280 * 2,
+  nameStart: {
+    x: 1080,
+    y: 550,
+  },
+  nameEnd: {
+    x: 1950,
+    y: 650,
+  },
+  majorStart: {
+    x: 1080,
+    y: 840,
+  },
+  majorEnd: {
+    x: 1950,
+    y: 940,
+  },
 };
+
+const defaultFont = "M PLUS 1p";
+const fonts = ["M PLUS 1p", "M PLUS Rounded 1c", "Nico Moji"];
+
 const { profUrl } = toRefs(props);
 const baseImageRatio = window.innerWidth / baseImageSizes.width;
 const canvasWidth = window.innerWidth;
@@ -36,6 +61,7 @@ const state = reactive({
   imageUrl: "",
   qrcodeBase64: "",
   qrcodeImage: new Image(),
+  font: defaultFont,
 });
 const stageRef = ref<InstanceType<typeof konva.Stage>>();
 
@@ -66,19 +92,24 @@ loadBackgroundImage();
 const nameTextConfig = computed<konva.TextConfig>(() => {
   return {
     text: props.name,
-    fontSize: 20,
-    width: 200,
-    x: 200,
-    y: 100,
+    fontSize:
+      (baseImageSizes.nameEnd.y - baseImageSizes.nameStart.y) * baseImageRatio,
+    x: baseImageSizes.nameStart.x * baseImageRatio,
+    y: baseImageSizes.nameStart.y * baseImageRatio,
+    draggable: true,
+    fontFamily: state.font,
   };
 });
 const majorTextConfig = computed<konva.TextConfig>(() => {
   return {
     text: props.major,
-    fontSize: 20,
-    width: 200,
-    x: 200,
-    y: 155,
+    fontSize:
+      (baseImageSizes.majorEnd.y - baseImageSizes.majorStart.y) *
+      baseImageRatio,
+    x: baseImageSizes.majorStart.x * baseImageRatio,
+    y: baseImageSizes.majorStart.y * baseImageRatio,
+    draggable: true,
+    fontFamily: state.font,
   };
 });
 
@@ -88,10 +119,15 @@ const iconConfig = computed<konva.ImageConfig | null>(() => {
   }
   return {
     image: props.iconImage,
-    width: 100,
-    height: 100,
-    x: 30,
-    y: 95,
+    width: baseImageSizes.iconWidth * baseImageRatio,
+    height: baseImageSizes.iconWidth * baseImageRatio,
+    x:
+      (baseImageSizes.iconCenter.x - baseImageSizes.iconWidth / 2) *
+      baseImageRatio,
+    y:
+      (baseImageSizes.iconCenter.y - baseImageSizes.iconWidth / 2) *
+      baseImageRatio,
+    draggable: true,
   };
 });
 
@@ -137,27 +173,28 @@ const exportImage = async () => {
 </script>
 
 <template>
-  <div id="canvas_div">
-    <v-stage :config="configKonva" id="stage" ref="stageRef">
-      <v-layer>
-        <v-image
-          v-if="backgroundImageConfig !== null"
-          :config="backgroundImageConfig"
-        />
-      </v-layer>
-      <v-layer>
-        <v-text :config="nameTextConfig"></v-text>
-      </v-layer>
-      <v-layer>
-        <v-text :config="majorTextConfig"></v-text>
-      </v-layer>
-      <v-layer>
-        <v-image v-if="iconConfig !== null" :config="iconConfig"></v-image>
-      </v-layer>
-      <v-layer>
-        <v-image v-if="profUrl !== ''" :config="qrcodeConfig"></v-image>
-      </v-layer>
-    </v-stage>
-  </div>
+  <select v-model="state.font">
+    <option v-for="font in fonts" :value="font" :key="font">{{ font }}</option>
+  </select>
+  <v-stage :config="configKonva" id="stage" ref="stageRef">
+    <v-layer>
+      <v-image
+        v-if="backgroundImageConfig !== null"
+        :config="backgroundImageConfig"
+      />
+    </v-layer>
+    <v-layer>
+      <v-text :config="nameTextConfig"></v-text>
+    </v-layer>
+    <v-layer>
+      <v-text :config="majorTextConfig"></v-text>
+    </v-layer>
+    <v-layer>
+      <v-image v-if="iconConfig !== null" :config="iconConfig"></v-image>
+    </v-layer>
+    <v-layer>
+      <v-image v-if="profUrl !== ''" :config="qrcodeConfig"></v-image>
+    </v-layer>
+  </v-stage>
   <button @click="exportImage">ダウンロード</button>
 </template>

@@ -42,7 +42,11 @@ const readImage = async () => {
   <h1>リベシティ 学生証メーカー</h1>
   <p>7ステップでかんたん作成💡</p>
   <b-accordion>
-    <b-accordion-item title="Step1 アイコンを選択してください" variant="dark">
+    <b-accordion-item
+      title="Step1 アイコンを選択してください"
+      variant="dark"
+      visible
+    >
       <b-button class="mx-1" variant="light" size="sm">
         <label variant="dark">
           <input
@@ -55,7 +59,11 @@ const readImage = async () => {
         </label>
       </b-button>
     </b-accordion-item>
-    <b-accordion-item title="Step2 名前・専攻を選択してください" variant="dark">
+    <b-accordion-item
+      title="Step2 名前・専攻を選択してください"
+      variant="dark"
+      visible
+    >
       <b-row>
         <b-form-input
           type="text"
@@ -75,6 +83,7 @@ const readImage = async () => {
     <b-accordion-item
       title="Step3 プロフィールURLを入力してください"
       variant="dark"
+      visible
     >
       <b-form-input
         type="text"
@@ -85,6 +94,7 @@ const readImage = async () => {
     <b-accordion-item
       title="Step4 文字のフォントと色を入力してください"
       variant="dark"
+      visible
     >
       <b-row>
         <b-form-select v-model="state.font" :options="fonts"></b-form-select>
@@ -93,24 +103,25 @@ const readImage = async () => {
         <b-form-input type="color" v-model="state.color" />
       </b-row>
     </b-accordion-item>
-    <b-accordion-item
-      class="px-0"
-      title="Step5 アイコン、文字、QRコードの位置を調整してください"
-      variant="dark"
-    >
-      <Canvas
-        ref="canvasRef"
-        :iconImage="state.icon"
-        :name="state.name"
-        :major="state.major"
-        :profUrl="state.profUrl"
-        :font="state.font"
-        :color="state.color"
-      />
-    </b-accordion-item>
+  </b-accordion>
+  <h2 class="pt-3 pb-2">Step5 仕上がりチェック！</h2>
+  <p class="text-start">
+    アイコン、文字、QRコードは自由に動かすことができます💡
+  </p>
+  <Canvas
+    ref="canvasRef"
+    :iconImage="state.icon"
+    :name="state.name"
+    :major="state.major"
+    :profUrl="state.profUrl"
+    :font="state.font"
+    :color="state.color"
+  />
+  <b-accordion class="pt-3">
     <b-accordion-item
       title="Step6 ↓のボタンを押してダウンロード"
       variant="dark"
+      visible
     >
       <b-button class="mx-1" variant="light" @click="canvasRef?.exportImage()"
         >ダウンロード</b-button
@@ -119,6 +130,7 @@ const readImage = async () => {
     <b-accordion-item
       title="Step7 ダウンロードした画像を印刷して名札ケースにIN！"
       variant="dark"
+      visible
     >
       <ul>
         <li>印刷する際は、用紙サイズを「はがき」に変更してください</li>

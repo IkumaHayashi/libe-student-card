@@ -36,6 +36,11 @@ body {
   text-align: center;
 }
 
+h2 {
+  text-align: justify;
+  font-size: 1.2em !important;
+}
+
 li {
   text-align: justify;
 }

@@ -12,7 +12,10 @@
     "deploy": "yarn build && firebase deploy --only hosting"
   },
   "dependencies": {
+    "@popperjs/core": "^2.11.6",
     "@types/qrcode": "^1.5.0",
+    "bootstrap": "^5.2.0",
+    "bootstrap-vue-3": "^0.2.9",
     "firebase": "^9.9.2",
     "konva": "^8.3.11",
     "qrcode": "^1.5.1",

@@ -8,6 +8,8 @@ const props = defineProps<{
   name: string;
   major: string;
   profUrl: string;
+  font: string;
+  color: string;
 }>();
 
 const baseImageSizes = {
@@ -44,12 +46,9 @@ const baseImageSizes = {
   },
 };
 
-const defaultFont = "M PLUS 1p";
-const fonts = ["M PLUS 1p", "M PLUS Rounded 1c", "Nico Moji"];
-
 const { profUrl } = toRefs(props);
-const baseImageRatio = window.innerWidth / baseImageSizes.width;
-const canvasWidth = window.innerWidth;
+const baseImageRatio = (window.innerWidth - 42) / baseImageSizes.width;
+const canvasWidth = window.innerWidth - 42;
 const canvasHeight = baseImageSizes.height * baseImageRatio;
 const configKonva = {
   width: canvasWidth,
@@ -61,8 +60,6 @@ const state = reactive({
   imageUrl: "",
   qrcodeBase64: "",
   qrcodeImage: new Image(),
-  font: defaultFont,
-  color: "#36455E",
 });
 const stageRef = ref<InstanceType<typeof konva.Stage>>();
 
@@ -98,8 +95,8 @@ const nameTextConfig = computed<konva.TextConfig>(() => {
     x: baseImageSizes.nameStart.x * baseImageRatio,
     y: baseImageSizes.nameStart.y * baseImageRatio,
     draggable: true,
-    fontFamily: state.font,
-    fill: state.color,
+    fontFamily: props.font,
+    fill: props.color,
   };
 });
 const majorTextConfig = computed<konva.TextConfig>(() => {
@@ -111,8 +108,8 @@ const majorTextConfig = computed<konva.TextConfig>(() => {
     x: baseImageSizes.majorStart.x * baseImageRatio,
     y: baseImageSizes.majorStart.y * baseImageRatio,
     draggable: true,
-    fontFamily: state.font,
-    fill: state.color,
+    fontFamily: props.font,
+    fill: props.color,
   };
 });
 
@@ -173,14 +170,10 @@ const exportImage = async () => {
   link.click();
   document.body.removeChild(link);
 };
+defineExpose({ exportImage });
 </script>
 
 <template>
-  <select v-model="state.font">
-    <option v-for="font in fonts" :value="font" :key="font">{{ font }}</option>
-  </select>
-  <label for="head">文字色を選択</label>
-  <input type="color" id="head" name="head" v-model="state.color" />
   <v-stage :config="configKonva" id="stage" ref="stageRef">
     <v-layer>
       <v-image
@@ -201,5 +194,4 @@ const exportImage = async () => {
       <v-image v-if="profUrl !== ''" :config="qrcodeConfig"></v-image>
     </v-layer>
   </v-stage>
-  <button @click="exportImage">ダウンロード</button>
 </template>

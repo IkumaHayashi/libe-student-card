@@ -39,7 +39,7 @@ const readImage = async () => {
 </script>
 
 <template>
-  <h1>リベシティ 学生証メーカー</h1>
+  <h1>【非公式】リベシティ 学生証メーカー</h1>
   <p>7ステップでかんたん作成💡</p>
   <b-accordion>
     <b-accordion-item

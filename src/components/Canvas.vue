@@ -2,98 +2,65 @@
 import { computed, reactive, ref, toRefs, watch } from "vue";
 import konva from "konva";
 import qrcode from "qrcode";
+import { BaseImage, BaseImageType } from "../config/baseImages";
 
 const props = defineProps<{
   iconImage: HTMLImageElement | null;
+  baseImageType: BaseImageType;
   name: string;
   major: string;
   profUrl: string;
   font: string;
   color: string;
 }>();
+const propRefs = toRefs(props);
 
-const baseImageSizes = {
-  width: 2041,
-  height: 1379,
-  qrStart: {
-    x: 1723,
-    y: 1060,
-  },
-  qrEnd: {
-    x: 1969,
-    y: 1307,
-  },
-  iconCenter: {
-    x: 450,
-    y: 780,
-  },
-  iconWidth: 280 * 2,
-  nameStart: {
-    x: 1080,
-    y: 500,
-  },
-  nameEnd: {
-    x: 1950,
-    y: 650,
-  },
-  majorStart: {
-    x: 1080,
-    y: 840,
-  },
-  majorEnd: {
-    x: 1950,
-    y: 940,
-  },
-};
+const paddingSize = 20;
+const lineSize = 1;
 
-const { profUrl } = toRefs(props);
-const baseImageRatio = (window.innerWidth - 42) / baseImageSizes.width;
-const canvasWidth = window.innerWidth - 42;
-const canvasHeight = baseImageSizes.height * baseImageRatio;
-const configKonva = {
-  width: canvasWidth,
-  height: canvasHeight,
-};
 const state = reactive({
-  backgroundImage: new Image(),
   isLoaded: false,
-  imageUrl: "",
-  qrcodeBase64: "",
   qrcodeImage: new Image(),
+  baseBesideImage: new Image(),
+  baseOpposite1Image: new Image(),
 });
 const stageRef = ref<InstanceType<typeof konva.Stage>>();
 
-// 背景画像の設定
-state.backgroundImage.width = canvasWidth;
-state.backgroundImage.height = canvasHeight;
-const backgroundImageConfig = computed(() => {
-  if (!state.isLoaded) {
-    return null;
-  }
+(async () => {
+  const baseBeside = new BaseImage("base_beside");
+  await baseBeside.readImage();
+  state.baseBesideImage = baseBeside.image;
+  const baseOpposite1 = new BaseImage("base_opposite1");
+  await baseOpposite1.readImage();
+  state.baseOpposite1Image = baseOpposite1.image;
+  state.isLoaded = true;
+})();
+
+const konvaConfig = computed(() => {
+  const canvasWidth = window.innerWidth - paddingSize * 2 - lineSize * 2;
+  const baseImage = new BaseImage(props.baseImageType);
   return {
-    image: state.backgroundImage,
+    width: canvasWidth,
+    height: baseImage.sizes.height * baseImageRatio.value,
   };
 });
-const loadBackgroundImage = async () => {
-  return new Promise<void>(async (resolve, reject) => {
-    const src = (await import("../assets/base_beside.png")).default;
-    state.backgroundImage.onload = () => {
-      state.isLoaded = true;
-      resolve();
-    };
-    state.backgroundImage.onerror = (e) => reject(e);
-    state.backgroundImage.src = src;
-  });
-};
-loadBackgroundImage();
+
+const baseImageRatio = computed<number>(
+  () =>
+    (window.innerWidth - paddingSize * 2 - lineSize * 2) /
+    baseImage.value.sizes.width
+);
+
+const baseImage = computed<BaseImage>(() => new BaseImage(props.baseImageType));
 
 const nameTextConfig = computed<konva.TextConfig>(() => {
   return {
     text: props.name,
     fontSize:
-      (baseImageSizes.nameEnd.y - baseImageSizes.nameStart.y) * baseImageRatio,
-    x: baseImageSizes.nameStart.x * baseImageRatio,
-    y: baseImageSizes.nameStart.y * baseImageRatio,
+      (baseImage.value.sizes.nameEnd.y - baseImage.value.sizes.nameStart.y) *
+      baseImageRatio.value,
+    x: baseImage.value.sizes.nameStart.x * baseImageRatio.value,
+    y: baseImage.value.sizes.nameStart.y * baseImageRatio.value,
     draggable: true,
     fontFamily: props.font,
     fill: props.color,
@@ -103,10 +70,10 @@ const majorTextConfig = computed<konva.TextConfig>(() => {
   return {
     text: props.major,
     fontSize:
-      (baseImageSizes.majorEnd.y - baseImageSizes.majorStart.y) *
-      baseImageRatio,
-    x: baseImageSizes.majorStart.x * baseImageRatio,
-    y: baseImageSizes.majorStart.y * baseImageRatio,
+      (baseImage.value.sizes.majorEnd.y - baseImage.value.sizes.majorStart.y) *
+      baseImageRatio.value,
+    x: baseImage.value.sizes.majorStart.x * baseImageRatio.value,
+    y: baseImage.value.sizes.majorStart.y * baseImageRatio.value,
     draggable: true,
     fontFamily: props.font,
     fill: props.color,
@@ -119,14 +86,16 @@ const iconConfig = computed<konva.ImageConfig | null>(() => {
   }
   return {
     image: props.iconImage,
-    width: baseImageSizes.iconWidth * baseImageRatio,
-    height: baseImageSizes.iconWidth * baseImageRatio,
+    width: baseImage.value.sizes.iconWidth * baseImageRatio.value,
+    height: baseImage.value.sizes.iconWidth * baseImageRatio.value,
     x:
-      (baseImageSizes.iconCenter.x - baseImageSizes.iconWidth / 2) *
-      baseImageRatio,
+      (baseImage.value.sizes.iconCenter.x -
+        baseImage.value.sizes.iconWidth / 2) *
+      baseImageRatio.value,
     y:
-      (baseImageSizes.iconCenter.y - baseImageSizes.iconWidth / 2) *
-      baseImageRatio,
+      (baseImage.value.sizes.iconCenter.y -
+        baseImage.value.sizes.iconWidth / 2) *
+      baseImageRatio.value,
     draggable: true,
   };
 });
@@ -134,15 +103,19 @@ const iconConfig = computed<konva.ImageConfig | null>(() => {
 const qrcodeConfig = computed<konva.ImageConfig>(() => {
   return {
     image: state.qrcodeImage,
-    width: (baseImageSizes.qrEnd.x - baseImageSizes.qrStart.x) * baseImageRatio,
+    width:
+      (baseImage.value.sizes.qrEnd.x - baseImage.value.sizes.qrStart.x) *
+      baseImageRatio.value,
     height:
-      (baseImageSizes.qrEnd.y - baseImageSizes.qrStart.y) * baseImageRatio,
-    x: baseImageSizes.qrStart.x * baseImageRatio,
-    y: baseImageSizes.qrStart.y * baseImageRatio,
+      (baseImage.value.sizes.qrEnd.y - baseImage.value.sizes.qrStart.y) *
+      baseImageRatio.value,
+    x: baseImage.value.sizes.qrStart.x * baseImageRatio.value,
+    y: baseImage.value.sizes.qrStart.y * baseImageRatio.value,
+    draggable: true,
   };
 });
 
-watch(profUrl, async (newValue) => {
+watch(propRefs.profUrl, async (newValue) => {
   const qrUrl = await qrcode.toDataURL(newValue);
 
   return new Promise<void>(async (resolve, reject) => {
@@ -161,7 +134,7 @@ const exportImage = async () => {
   }
   const imageUrl = stageRef.value
     .getStage()
-    .toDataURL({ pixelRatio: 1 / baseImageRatio });
+    .toDataURL({ pixelRatio: 1 / baseImageRatio.value });
 
   const link = document.createElement("a");
   link.download = "icon.png";
@@ -170,27 +143,30 @@ const exportImage = async () => {
   link.click();
   document.body.removeChild(link);
 };
+
 defineExpose({ exportImage });
 </script>
 
 <template>
-  <v-stage :config="configKonva" id="stage" ref="stageRef">
-    <v-layer>
-      <v-image
-        v-if="backgroundImageConfig !== null"
-        :config="backgroundImageConfig"
-      />
+  <v-stage :config="konvaConfig" id="stage" ref="stageRef">
+    <v-layer
+      :config="{
+        visible: state.isLoaded && props.baseImageType === 'base_beside',
+      }"
+    >
+      <v-image :config="{ image: state.baseBesideImage }" />
+    </v-layer>
+    <v-layer
+      :config="{
+        visible: state.isLoaded && props.baseImageType === 'base_opposite1',
+      }"
+    >
+      <v-image :config="{ image: state.baseOpposite1Image }" />
     </v-layer>
     <v-layer>
       <v-text :config="nameTextConfig"></v-text>
-    </v-layer>
-    <v-layer>
       <v-text :config="majorTextConfig"></v-text>
-    </v-layer>
-    <v-layer>
       <v-image v-if="iconConfig !== null" :config="iconConfig"></v-image>
-    </v-layer>
-    <v-layer>
       <v-image v-if="profUrl !== ''" :config="qrcodeConfig"></v-image>
     </v-layer>
   </v-stage>

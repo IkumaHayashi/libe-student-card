@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Canvas from "./components/Canvas.vue";
 import { reactive, ref } from "vue";
+import { BaseImage, BaseImageType } from "./config/baseImages";
 const fonts = ["M PLUS 1p", "M PLUS Rounded 1c", "Nico Moji"];
 
 const canvasRef = ref<InstanceType<typeof Canvas>>();
@@ -11,6 +12,7 @@ const state = reactive({
   profUrl: "",
   font: "M PLUS 1p",
   color: "#36455E",
+  baseImageType: "base_opposite1" as BaseImageType,
 });
 
 const fileRef = ref<HTMLInputElement>();
@@ -43,7 +45,29 @@ const readImage = async () => {
   <p>7ステップでかんたん作成💡</p>
   <b-accordion>
     <b-accordion-item
-      title="Step1 アイコンを選択してください"
+      title="Step1 ベースとなる画像を選択してください"
+      variant="dark"
+      visible
+    >
+      <input
+        id="base-image-opposite1-radio"
+        type="radio"
+        value="base_opposite1"
+        v-model="state.baseImageType"
+      /><label for="base-image-opposite1-radio">
+        ハガキ・縦・ジャンプ学長<img src="./assets/base_opposite1.png" />
+      </label>
+      <input
+        id="base-image-beside-radio"
+        type="radio"
+        value="base_beside"
+        v-model="state.baseImageType"
+      /><label for="base-image-beside-radio">
+        ハガキ・横・指差し学長<img src="./assets/base_beside.png" />
+      </label>
+    </b-accordion-item>
+    <b-accordion-item
+      title="Step2 アイコンを選択してください"
       variant="dark"
       visible
     >
@@ -60,7 +84,7 @@ const readImage = async () => {
       </b-button>
     </b-accordion-item>
     <b-accordion-item
-      title="Step2 名前・専攻を選択してください"
+      title="Step3 名前・専攻・プロフィールURLを選択してください"
       variant="dark"
       visible
     >
@@ -79,17 +103,13 @@ const readImage = async () => {
           max-rows="2"
         />
       </b-row>
-    </b-accordion-item>
-    <b-accordion-item
-      title="Step3 プロフィールURLを入力してください"
-      variant="dark"
-      visible
-    >
-      <b-form-input
-        type="text"
-        v-model="state.profUrl"
-        placeholder="プロフィールURLを入力してください"
-      />
+      <b-row>
+        <b-form-input
+          type="text"
+          v-model="state.profUrl"
+          placeholder="プロフィールURLを入力してください"
+        />
+      </b-row>
     </b-accordion-item>
     <b-accordion-item
       title="Step4 文字のフォントと色を入力してください"
@@ -110,6 +130,7 @@ const readImage = async () => {
   </p>
   <Canvas
     ref="canvasRef"
+    :baseImageType="state.baseImageType"
     :iconImage="state.icon"
     :name="state.name"
     :major="state.major"

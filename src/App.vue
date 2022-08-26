@@ -162,6 +162,9 @@ const readImage = async () => {
             >コチラ</a
           >がおすすめです
         </li>
+        <li>コピー機をお持ちでない方はコンビニで印刷も可能です
+          <a href="https://photolog.aiko15.com/30017/" target="_blank">詳細はこちら</a>
+        </li>
       </ul>
     </b-accordion-item>
   </b-accordion>

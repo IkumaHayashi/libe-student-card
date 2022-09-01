@@ -174,8 +174,8 @@ body {
 }
 
 .step__button,
-button.step__button,
-button.step__button:focus {
+.step__button.step__button,
+.step__button.step__button:focus {
   color: #fff;
   font-size: 14px;
   line-height: 1;
@@ -187,9 +187,32 @@ button.step__button:focus {
   background-color: #36455E;
 }
 
-button.step__button:hover {
+.step__button.step__button:hover {
   color: #36455E;
   background-color: #fff;
+}
+
+.step__button.step__button--download {
+  padding: 16px 17px;
+  width: 100%;
+  max-width: 220px;
+  border-radius: 30px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, .06);
+  margin: 0 auto;
+  display: block;
+  position: relative;
+}
+
+.step__button.step__button--download::after {
+  content: "";
+  position: absolute;
+  top: 21px;
+  right: 20px;
+  transform: rotate(45deg);
+  width: 6px;
+  height: 6px;
+  border-top: 1px solid #fff;
+  border-right: 1px solid #fff;
 }
 
 .step-item textarea {

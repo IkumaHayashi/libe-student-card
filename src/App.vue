@@ -171,7 +171,7 @@ const readImage = async () => {
       </span>
       <p class="step-item__title">↓のボタンを押してダウンロード</p>
       <div class="step__content">
-        <b-button class="step__button" variant="light" @click="canvasRef?.exportImage()"
+        <b-button class="step__button step__button--download" variant="light" @click="canvasRef?.exportImage()"
         >ダウンロード</b-button
       >
       </div>

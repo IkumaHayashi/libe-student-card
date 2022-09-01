@@ -12,11 +12,9 @@ const props = defineProps<{
   profUrl: string;
   font: string;
   color: string;
+  canvasWidth: number;
 }>();
 const propRefs = toRefs(props);
-
-const paddingSize = 20;
-const lineSize = 1;
 
 const state = reactive({
   isLoaded: false,
@@ -26,32 +24,34 @@ const state = reactive({
 });
 const stageRef = ref<InstanceType<typeof konva.Stage>>();
 
-(async () => {
-  const baseBeside = new BaseImage("base_beside");
+watch(propRefs.canvasWidth, async (newValue) => {
+  const baseBeside = new BaseImage("base_beside", newValue);
   await baseBeside.readImage();
   state.baseBesideImage = baseBeside.image;
-  const baseOpposite1 = new BaseImage("base_opposite1");
+  const baseOpposite1 = new BaseImage("base_opposite1", newValue);
   await baseOpposite1.readImage();
   state.baseOpposite1Image = baseOpposite1.image;
   state.isLoaded = true;
-})();
+});
 
 const konvaConfig = computed(() => {
-  const canvasWidth = window.innerWidth - paddingSize * 2 - lineSize * 2;
-  const baseImage = new BaseImage(props.baseImageType);
+  const baseImage = new BaseImage(
+    props.baseImageType,
+    propRefs.canvasWidth.value
+  );
   return {
-    width: canvasWidth,
+    width: propRefs.canvasWidth.value,
     height: baseImage.sizes.height * baseImageRatio.value,
   };
 });
 
 const baseImageRatio = computed<number>(
-  () =>
-    (window.innerWidth - paddingSize * 2 - lineSize * 2) /
-    baseImage.value.sizes.width
+  () => propRefs.canvasWidth.value / baseImage.value.sizes.width
 );
 
-const baseImage = computed<BaseImage>(() => new BaseImage(props.baseImageType));
+const baseImage = computed<BaseImage>(
+  () => new BaseImage(props.baseImageType, propRefs.canvasWidth.value)
+);
 
 const nameTextConfig = computed<konva.TextConfig>(() => {
   return {

@@ -8,9 +8,11 @@ export const baseImageTypes: BaseImageType[] = [
 export class BaseImage {
   type: BaseImageType;
   image: HTMLImageElement;
-  constructor(type: BaseImageType) {
+  canvasWidth: number;
+  constructor(type: BaseImageType, canvasWidth: number) {
     this.type = type;
     this.image = new Image();
+    this.canvasWidth = canvasWidth;
   }
   get fileName() {
     return this.type + ".png";
@@ -25,13 +27,7 @@ export class BaseImage {
   }
 
   get ratio() {
-    return (window.innerWidth - 42) / this.sizes.width;
-  }
-  get canvasSizes() {
-    return {
-      width: window.innerWidth - 42,
-      height: this.sizes.height * this.ratio,
-    };
+    return this.canvasWidth / this.sizes.width;
   }
 
   async readImage() {

@@ -174,7 +174,7 @@ body {
 }
 
 .step__button,
-.step__button.step__button,
+.step__button.step__button--download,
 .step__button.step__button:focus {
   color: #fff;
   font-size: 14px;
@@ -187,9 +187,10 @@ body {
   background-color: #36455E;
 }
 
-.step__button.step__button:hover {
-  color: #36455E;
-  background-color: #fff;
+.step__button.step__button--download:hover {
+  opacity: .9;
+  color: #fff;
+  background-color: #36455E;
 }
 
 .step__button.step__button--download {
@@ -201,6 +202,7 @@ body {
   margin: 0 auto;
   display: block;
   position: relative;
+  transition: opacity .2s ease;
 }
 
 .step__button.step__button--download::after {

@@ -100,6 +100,26 @@ const iconConfig = computed<konva.ImageConfig | null>(() => {
   };
 });
 
+const groupConfig = computed(() => {
+  if (iconConfig.value === null) {
+    return null;
+  }
+  const iconCenterX = baseImage.value.sizes.iconCenter.x * baseImageRatio.value;
+  const iconCenterY = baseImage.value.sizes.iconCenter.y * baseImageRatio.value;
+  return {
+    clipFunc: (ctx: CanvasRenderingContext2D) => {
+      ctx.arc(
+        iconCenterX,
+        iconCenterY,
+        iconConfig?.value!.width! / 2,
+        0,
+        Math.PI * 2,
+        false
+      );
+    },
+  };
+});
+
 const qrcodeConfig = computed<konva.ImageConfig>(() => {
   return {
     image: state.qrcodeImage,
@@ -166,7 +186,9 @@ defineExpose({ exportImage });
     <v-layer>
       <v-text :config="nameTextConfig"></v-text>
       <v-text :config="majorTextConfig"></v-text>
-      <v-image v-if="iconConfig !== null" :config="iconConfig"></v-image>
+      <v-group :config="groupConfig">
+        <v-image v-if="iconConfig !== null" :config="iconConfig"></v-image>
+      </v-group>
       <v-image v-if="profUrl !== ''" :config="qrcodeConfig"></v-image>
     </v-layer>
   </v-stage>

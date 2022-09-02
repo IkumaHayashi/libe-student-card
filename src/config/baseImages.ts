@@ -59,7 +59,7 @@ export class BaseImage {
             x: 450,
             y: 780,
           },
-          iconWidth: 280 * 2,
+          iconWidth: 770,
           nameStart: {
             x: 1080,
             y: 500,
@@ -93,7 +93,7 @@ export class BaseImage {
             x: 700,
             y: 700,
           },
-          iconWidth: 280 * 2,
+          iconWidth: 770,
           nameStart: {
             x: 270,
             y: 1190,

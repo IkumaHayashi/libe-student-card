@@ -137,7 +137,7 @@ const readImage = async () => {
           <span class="step-item__number--lg">03</span>
         </span>
         <p class="step-item__title">
-          名前・専攻・プロフィールURLを<br />選択してください
+          名前・専攻・プロフィールURLを<br />入力してください
         </p>
         <div class="step__content">
           <b-form-input

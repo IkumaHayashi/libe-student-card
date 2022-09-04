@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { computed, reactive, ref, toRefs, watch } from "vue";
+import { logEvent } from "firebase/analytics";
+import { analytics } from "../plugins/firebase";
 import konva from "konva";
 import qrcode from "qrcode";
 import { BaseImage, BaseImageType } from "../config/baseImages";
@@ -162,6 +164,7 @@ const exportImage = async () => {
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
+  logEvent(analytics, "画像ダウンロード");
 };
 
 defineExpose({ exportImage });

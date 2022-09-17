@@ -4,7 +4,11 @@ import { logEvent } from "firebase/analytics";
 import { analytics } from "../plugins/firebase";
 import konva from "konva";
 import qrcode from "qrcode";
-import { BaseImage, BaseImageType } from "../config/baseImages";
+import {
+  BaseImage,
+  BaseImageType,
+  baseImageTypeValues,
+} from "../config/baseImages";
 
 const props = defineProps<{
   iconImage: HTMLImageElement | null;
@@ -21,20 +25,32 @@ const propRefs = toRefs(props);
 const state = reactive({
   isLoaded: false,
   qrcodeImage: new Image(),
-  baseBesideImage: new Image(),
-  baseOpposite1Image: new Image(),
+  baseImages: {
+    base_opposite_finger: new Image(),
+    base_opposite_jump: new Image(),
+    base_beside_finger: new Image(),
+    base_beside_jump: new Image(),
+  },
 });
 const stageRef = ref<InstanceType<typeof konva.Stage>>();
 
 watch(propRefs.canvasWidth, async (newValue) => {
-  const baseBeside = new BaseImage("base_beside", newValue);
-  await baseBeside.readImage();
-  state.baseBesideImage = baseBeside.image;
-  const baseOpposite1 = new BaseImage("base_opposite1", newValue);
-  await baseOpposite1.readImage();
-  state.baseOpposite1Image = baseOpposite1.image;
+  [
+    state.baseImages.base_opposite_finger,
+    state.baseImages.base_opposite_jump,
+    state.baseImages.base_beside_finger,
+    state.baseImages.base_beside_jump,
+  ] = await Promise.all(
+    baseImageTypeValues.map(async (baseImageType) => {
+      const baseImage = new BaseImage(baseImageType, newValue);
+      await baseImage.readImage();
+      return baseImage.image;
+    })
+  );
   state.isLoaded = true;
 });
+
+const baseImageTypes = computed(() => baseImageTypeValues);
 
 const konvaConfig = computed(() => {
   const baseImage = new BaseImage(
@@ -173,18 +189,12 @@ defineExpose({ exportImage });
 <template>
   <v-stage :config="konvaConfig" id="stage" ref="stageRef">
     <v-layer
+      v-for="baseImageType in baseImageTypes"
       :config="{
-        visible: state.isLoaded && props.baseImageType === 'base_beside',
+        visible: state.isLoaded && props.baseImageType === baseImageType,
       }"
     >
-      <v-image :config="{ image: state.baseBesideImage }" />
-    </v-layer>
-    <v-layer
-      :config="{
-        visible: state.isLoaded && props.baseImageType === 'base_opposite1',
-      }"
-    >
-      <v-image :config="{ image: state.baseOpposite1Image }" />
+      <v-image :config="{ image: state.baseImages[baseImageType] }" />
     </v-layer>
     <v-layer>
       <v-text :config="nameTextConfig"></v-text>

@@ -14,7 +14,7 @@ const state = reactive({
   profUrl: "",
   font: "M PLUS 1p",
   color: "#36455E",
-  baseImageType: "base_opposite1" as BaseImageType,
+  baseImageType: "base_opposite_jump" as BaseImageType,
   canvasWidth: 0,
 });
 
@@ -60,7 +60,7 @@ const readImage = async () => {
     <h1 class="main-visual">
       <img
         src="./assets/main-visual.png"
-        alt="【非公式】リベシティ 学生証メーカー"
+        alt="【非公式】リベシティ 名札メーカー"
       />
     </h1>
     <p class="main-heading">
@@ -77,33 +77,66 @@ const readImage = async () => {
         <div class="step__content">
           <div class="step-item__typeA">
             <input
-              id="base-image-opposite1-radio"
+              id="base-image-opposite-jump-radio"
               type="radio"
-              value="base_opposite1"
+              value="base_opposite_jump"
               v-model="state.baseImageType"
             /><label
-              for="base-image-opposite1-radio"
+              for="base-image-opposite-jump-radio"
               class="step-item__radio-label"
             >
               タイプ<span class="step-item__text--lg">A</span> :
               ハガキ･縦･ジャンプ学長</label
             >
-            <img src="./assets/base_opposite1.png" class="step__type-img" />
+            <img src="./assets/base_opposite_jump.png" class="step__type-img" />
           </div>
           <div class="step-item__typeB">
             <input
-              id="base-image-beside-radio"
+              id="base-image-opposite-finger-radio"
               type="radio"
-              value="base_beside"
+              value="base_opposite_finger"
               v-model="state.baseImageType"
             /><label
-              for="base-image-beside-radio"
+              for="base-image-opposite-finger-radio"
               class="step-item__radio-label"
             >
               タイプ<span class="step-item__text--lg">B</span> :
+              ハガキ･縦･指差し学長</label
+            >
+            <img
+              src="./assets/base_opposite_finger.png"
+              class="step__type-img"
+            />
+          </div>
+          <div class="step-item__typeC">
+            <input
+              id="base-image-beside-jump-radio"
+              type="radio"
+              value="base_beside_jump"
+              v-model="state.baseImageType"
+            /><label
+              for="base-image-beside-jump-radio"
+              class="step-item__radio-label"
+            >
+              タイプ<span class="step-item__text--lg">C</span> :
+              ハガキ･横･ジャンプ学長</label
+            >
+            <img src="./assets/base_beside_jump.png" class="step__type-img" />
+          </div>
+          <div class="step-item__typeD">
+            <input
+              id="base-image-beside-finger-radio"
+              type="radio"
+              value="base_beside_finger"
+              v-model="state.baseImageType"
+            /><label
+              for="base-image-beside-finger-radio"
+              class="step-item__radio-label"
+            >
+              タイプ<span class="step-item__text--lg">D</span> :
               ハガキ･横･指差し学長</label
             >
-            <img src="./assets/base_beside.png" class="step__type-img" />
+            <img src="./assets/base_beside_finger.png" class="step__type-img" />
           </div>
         </div>
       </li>

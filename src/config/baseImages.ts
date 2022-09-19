@@ -1,10 +1,14 @@
-export type BaseImageType = "base_beside" | "base_opposite1";
-
-export const baseImageTypes: BaseImageType[] = [
-  "base_beside",
-  "base_opposite1",
+export type BaseImageType =
+  | "base_beside_jump"
+  | "base_beside_finger"
+  | "base_opposite_jump"
+  | "base_opposite_finger";
+export const baseImageTypeValues: BaseImageType[] = [
+  "base_opposite_finger",
+  "base_opposite_jump",
+  "base_beside_finger",
+  "base_beside_jump",
 ];
-
 export class BaseImage {
   type: BaseImageType;
   image: HTMLImageElement;
@@ -14,15 +18,26 @@ export class BaseImage {
     this.image = new Image();
     this.canvasWidth = canvasWidth;
   }
+  get name() {
+    return "ハガキ・" + this.type.includes("opposite")
+      ? "縦"
+      : "横" + "・" + this.type.includes("jump")
+      ? "ジャンプ"
+      : "指出し" + "学長";
+  }
   get fileName() {
     return this.type + ".png";
   }
   async getFilePath() {
     switch (this.type) {
-      case "base_beside":
-        return (await import("../assets/base_beside.png")).default;
-      case "base_opposite1":
-        return (await import("../assets/base_opposite1.png")).default;
+      case "base_beside_finger":
+        return (await import("../assets/base_beside_finger.png")).default;
+      case "base_beside_jump":
+        return (await import("../assets/base_beside_jump.png")).default;
+      case "base_opposite_finger":
+        return (await import("../assets/base_opposite_finger.png")).default;
+      case "base_opposite_jump":
+        return (await import("../assets/base_opposite_jump.png")).default;
     }
   }
 
@@ -43,7 +58,8 @@ export class BaseImage {
   }
   get sizes() {
     switch (this.type) {
-      case "base_beside":
+      case "base_beside_finger":
+      case "base_beside_jump":
         return {
           width: 2041,
           height: 1379,
@@ -77,7 +93,8 @@ export class BaseImage {
             y: 940,
           },
         };
-      case "base_opposite1":
+      case "base_opposite_finger":
+      case "base_opposite_jump":
         return {
           width: 1379,
           height: 2041,

@@ -20,22 +20,21 @@ body {
   min-width: 320px;
   min-height: 100vh;
   font-weight: 500 !important;
-  font-family: 'Noto Sans JP', sans-serif !important;
+  font-family: "Noto Sans JP", sans-serif !important;
   overflow-x: hidden;
-  background: -webkit-linear-gradient(145deg, #FFFFFF, #ECE9E6);
-  background: linear-gradient(-45deg, #FFFFFF, #ECE9E6);
+  background: -webkit-linear-gradient(145deg, #ffffff, #ece9e6);
+  background: linear-gradient(-45deg, #ffffff, #ece9e6);
 }
 
 .main-contents {
   margin: 0px auto;
   display: block;
   max-width: 580px !important;
-  background-color: #DFEFE8;
-  box-shadow: 0 0 20px rgba(0, 0, 0, .05) !important;
+  background-color: #dfefe8;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05) !important;
 }
 
 @media only screen and (min-width: 581px) {
-
   .main-contents {
     margin: 40px auto;
     max-height: 90vh;
@@ -90,7 +89,7 @@ body {
   letter-spacing: 0.07em;
   font-weight: bold;
   line-height: 1;
-  font-family: 'Lato', sans-serif;
+  font-family: "Lato", sans-serif;
 }
 
 .step-item__number--lg {
@@ -148,10 +147,16 @@ body {
 
 .step-item__typeA {
   padding-bottom: 30px;
-  border-bottom: 1px solid #DFEFE8;
+  border-bottom: 1px solid #dfefe8;
+}
+.step-item__typeB,
+.step-item__typeC {
+  padding-top: 20px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid #dfefe8;
 }
 
-.step-item__typeB {
+.step-item__typeD {
   padding-top: 20px;
 }
 
@@ -184,13 +189,13 @@ body {
   padding: 11px 17px;
   border-radius: 3px;
   cursor: pointer;
-  background-color: #36455E;
+  background-color: #36455e;
 }
 
 .step__button.step__button--download:hover {
-  opacity: .9;
+  opacity: 0.9;
   color: #fff;
-  background-color: #36455E;
+  background-color: #36455e;
 }
 
 .step__button.step__button--download {
@@ -198,11 +203,11 @@ body {
   width: 100%;
   max-width: 220px;
   border-radius: 30px;
-  box-shadow: 0 0 12px rgba(0, 0, 0, .06);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.06);
   margin: 0 auto;
   display: block;
   position: relative;
-  transition: opacity .2s ease;
+  transition: opacity 0.2s ease;
 }
 
 .step__button.step__button--download::after {
@@ -260,7 +265,6 @@ body {
   left: 0;
 }
 
-
 #app {
   max-width: 1280px;
   padding: 0;
@@ -271,7 +275,6 @@ h2 {
   text-align: justify;
   font-size: 1.3em !important;
 }
-
 
 img {
   width: 100%;

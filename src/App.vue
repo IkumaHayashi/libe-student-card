@@ -277,10 +277,17 @@ const readImage = async () => {
             </li>
             <li>
               コピー機をお持ちでない方はコンビニで印刷も可能です。<a
-                href="https://photolog.aiko15.com/30017/"
+                href="https://networkprint.ne.jp/Lite/start?lang=jajp"
                 target="_blank"
                 >詳細はこちら</a
               >
+            </li>
+            <li>
+              お問い合わせは「いくま」まで。リベシティ<a
+                href="https://libecity.com/user_profile/nVtrD8twizc9C3OJeISfiGCFClw2"
+                target="_blank"
+                >DM</a
+              >でお受けいたします。
             </li>
           </ul>
         </div>
